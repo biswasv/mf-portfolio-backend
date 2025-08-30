@@ -1,0 +1,26 @@
+# render.yaml — FastAPI backend (Render Blueprint)
+services:
+  - type: web
+    name: mf-portfolio-backend
+    env: python
+    region: oregon            # pick closest: oregon, frankfurt, singapore, etc.
+    plan: free                # upgrade if you need more RAM/CPU
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: MF_API_KEY
+        sync: false           # set value in Render Dashboard
+      - key: AUTH_REQUIRED
+        value: "true"
+      - key: SECRET_KEY
+        sync: false           # set a strong secret in Dashboard
+      - key: APP_USER
+        value: admin
+      - key: APP_PASS
+        sync: false           # set in Dashboard
+      - key: ACCESS_TOKEN_EXPIRE_SECONDS
+        value: "604800"       # 7 days
